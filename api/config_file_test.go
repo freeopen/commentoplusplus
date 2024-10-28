@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"fmt"
 	"os"
 	"testing"
 )
@@ -9,12 +9,12 @@ import (
 func TestConfigFileLoadBasics(t *testing.T) {
 	failTestOnError(t, setupTestEnv())
 
-	f, err := ioutil.TempFile("", "commento")
+	f, err := os.CreateTemp("", "commento")
 	if err != nil {
 		t.Errorf("error creating temporary file: %v", err)
 		return
 	}
-
+	fmt.Println("Temp file name:", f.Name())
 	defer func() {
 		if err := f.Close(); err != nil {
 			t.Errorf("error closing temporary file: %v", err)
@@ -31,6 +31,7 @@ func TestConfigFileLoadBasics(t *testing.T) {
 		# Commento port
 		COMMENTO_PORT=8000
 		COMMENTO_GZIP_STATIC=true
+		DB="sqlite3:/User/xhaolin/proj/commentoplusplus/789.db"
 	`
 	if _, err := f.Write([]byte(contents)); err != nil {
 		t.Errorf("error writing to temporary file: %v", err)
@@ -57,7 +58,7 @@ func TestConfigFileLoadBasics(t *testing.T) {
 func TestConfigFileLoadInvalid(t *testing.T) {
 	failTestOnError(t, setupTestEnv())
 
-	f, err := ioutil.TempFile("", "commento")
+	f, err := os.CreateTemp("", "commento")
 	if err != nil {
 		t.Errorf("error creating temporary file: %v", err)
 		return
@@ -77,7 +78,7 @@ func TestConfigFileLoadInvalid(t *testing.T) {
 
 	contents := `
 		COMMENTO_PORT=8000
-		INVALID_LINE
+	  INVALID_LINE
 	`
 	if _, err := f.Write([]byte(contents)); err != nil {
 		t.Errorf("error writing to temporary file: %v", err)

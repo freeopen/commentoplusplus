@@ -17,7 +17,9 @@ func configParse() error {
 	defaults := map[string]string{
 		"CONFIG_FILE": "",
 
-		"POSTGRES": "postgres://postgres:postgres@localhost/commento?sslmode=disable",
+		// "DB": "postgres://postgres:postgres@localhost/commento?sslmode=disable",
+		// "POSTGRES": "",
+		"DB": "sqlite3:/Users/xhaolin/proj/commentoplusplus/789.db",
 
 		// PostgreSQL recommends max_connections in the order of hundreds. The default
 		// is 100, so let's use half that and leave the other half for other services.
@@ -86,7 +88,8 @@ func configParse() error {
 	}
 
 	// Mandatory config parameters
-	for _, env := range []string{"POSTGRES", "PORT", "ORIGIN", "FORBID_NEW_OWNERS", "MAX_IDLE_PG_CONNECTIONS"} {
+	// for _, env := range []string{"POSTGRES", "PORT", "ORIGIN", "FORBID_NEW_OWNERS", "MAX_IDLE_PG_CONNECTIONS"} {
+	for _, env := range []string{"DB", "PORT", "ORIGIN", "FORBID_NEW_OWNERS", "MAX_IDLE_PG_CONNECTIONS"} {
 		if os.Getenv(env) == "" {
 			logger.Errorf("missing COMMENTO_%s environment variable", env)
 			return errorMissingConfig

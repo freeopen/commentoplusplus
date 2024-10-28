@@ -5,7 +5,7 @@ func main() {
 	exitIfError(versionPrint())
 	exitIfError(configParse())
 	exitIfError(dbConnect(5))
-	exitIfError(migrate())
+	// exitIfError(migrate())
 	exitIfError(smtpConfigure())
 	exitIfError(smtpTemplatesLoad())
 	exitIfError(oauthConfigure())

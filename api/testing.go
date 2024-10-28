@@ -62,24 +62,25 @@ func dropTables() error {
 }
 
 func setupTestDatabase() error {
-	if os.Getenv("COMMENTO_POSTGRES") != "" {
+	if os.Getenv("COMMENTO_DB") != "" {
 		// set it manually because we need to use commento_test, not commento, by mistake
-		os.Setenv("POSTGRES", os.Getenv("COMMENTO_POSTGRES"))
+		os.Setenv("DB", os.Getenv("COMMENTO_DB"))
 	} else {
-		os.Setenv("POSTGRES", "postgres://postgres:postgres@localhost/commento_test?sslmode=disable")
+		// os.Setenv("POSTGRES", "postgres://postgres:postgres@localhost/commento_test?sslmode=disable")
+		os.Setenv("DB", "sqlite3:/Users/xhaolin/proj/commentoplusplus/test.db")
 	}
 
 	if err := dbConnect(0); err != nil {
 		return err
 	}
 
-	if err := dropTables(); err != nil {
-		return err
-	}
+	// if err := dropTables(); err != nil {
+	// 	return err
+	// }
 
-	if err := migrateFromDir("../db/"); err != nil {
-		return err
-	}
+	// if err := migrateFromDir("../db/"); err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
@@ -126,9 +127,9 @@ func setupTestEnv() error {
 		}
 	}
 
-	if err := clearTables(); err != nil {
-		return err
-	}
+	// if err := clearTables(); err != nil {
+	// 	return err
+	// }
 
 	hub = newHub()
 	go hub.run()
