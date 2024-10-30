@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"golang.org/x/oauth2"
 )
 
 func googleRedirectHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +21,13 @@ func googleRedirectHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "error: %s\n", err.Error())
 		return
 	}
+	nonce, err := randString(16)
+	if err != nil {
+		http.Error(w, "Internal error", http.StatusInternalServerError)
+		return
+	}
+	setCallbackCookie(w, r, "nonce", nonce)
 
-	url := googleConfig.AuthCodeURL(commenterToken)
+	url := googleConfig.AuthCodeURL(commenterToken, oauth2.SetAuthURLParam("nonce", nonce))
 	http.Redirect(w, r, url, http.StatusFound)
 }

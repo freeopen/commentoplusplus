@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"reflect"
+	"time"
 )
 
 type response map[string]interface{}
@@ -55,4 +56,15 @@ func getIp(r *http.Request) string {
 
 func getUserAgent(r *http.Request) string {
 	return r.Header.Get("User-Agent")
+}
+
+func setCallbackCookie(w http.ResponseWriter, r *http.Request, name, value string) {
+	c := &http.Cookie{
+		Name:     name,
+		Value:    value,
+		MaxAge:   int(time.Hour.Seconds()),
+		Secure:   r.TLS != nil,
+		HttpOnly: true,
+	}
+	http.SetCookie(w, c)
 }
