@@ -4,19 +4,38 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+	"strings"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
 )
 
-func googleCallbackHandler(w http.ResponseWriter, r *http.Request) {
+func commCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
+	// oidc or code mode
+	// select the brand in url
+	path := r.URL.Path
+	segments := strings.Split(path, "/")
+	var start, end int
+	for i, segment := range segments {
+		if segment == "oauth" {
+			start = i + 1
+		} else if segment == "callback" && start > 0 {
+			end = i
+			break
+		}
+	}
+	brand := strings.Join(segments[start:end], "")
+	if brand == "google" {
+		// oidc mode
+	} else {
+		// code mode
+	}
 
-	provider, err := oidc.NewProvider(ctx, "https://accounts.google.com")
+	provider, err := oidc.NewProvider(ctx, r.URL.Scheme+"://"+r.URL.Host)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 	oidcConfig := &oidc.Config{
 		ClientID: googleConfig.ClientID,

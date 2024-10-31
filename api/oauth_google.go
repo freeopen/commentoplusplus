@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 
-	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
@@ -32,7 +31,7 @@ func googleOauthConfigure() error {
 		RedirectURL:  os.Getenv("ORIGIN") + "/api/oauth/google/callback",
 		ClientID:     os.Getenv("GOOGLE_KEY"),
 		ClientSecret: os.Getenv("GOOGLE_SECRET"),
-		Scopes:       []string{oidc.ScopeOpenID, "profile", "email"},
+		Scopes:       []string{"openid", "profile", "email"},
 		// Scopes: []string{
 		// 	"https://www.googleapis.com/auth/userinfo.profile",
 		// 	"https://www.googleapis.com/auth/userinfo.email",

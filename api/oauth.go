@@ -1,11 +1,17 @@
 package main
 
-import ()
-
-var googleConfigured bool
-var twitterConfigured bool
-var githubConfigured bool
-var gitlabConfigured bool
+var (
+	googleConfigured      bool
+	twitterConfigured     bool
+	githubConfigured      bool
+	gitlabConfigured      bool
+	qqConfigured          bool
+	wechatConfigured      bool
+	douyinConfigured      bool
+	dingtalkConfigured    bool
+	xiaohongshuConfigured bool
+	weiboConfigured       bool
+)
 
 func oauthConfigure() error {
 	if err := googleOauthConfigure(); err != nil {
